@@ -1,25 +1,16 @@
 import { createStore } from 'redux';
 
 const saveToLocalStorage = (state) => {
-    try {
-        const serializedState = JSON.stringify(state);
-        localStorage.setItem('state', serializedState);
-    } catch(err) {
-        console.log(err);
-    }
+    const serializedState = JSON.stringify(state);
+    localStorage.setItem('state', serializedState);
 }
 
 const loadFromLocalStorage = () => {
-    try {
-        const serializedState = localStorage.getItem('state');
-        if(serializedState === null) {
-            return undefined;
-        }
-        return JSON.parse(serializedState);
-    } catch(err) {
-        console.log(err)
+    const serializedState = localStorage.getItem('state');
+    if(serializedState === null) {
         return undefined;
     }
+    return JSON.parse(serializedState);
 }
 
 const initialState = {
@@ -59,11 +50,12 @@ const listReducer = (state = initialState, action)  => {
 
     return state;
 }
-const persistedState = loadFromLocalStorage();
+
+let persistedState = loadFromLocalStorage();
 
 const store = createStore(
     listReducer,
-    persistedState.people.length !== 0 ? persistedState : undefined,
+    persistedState?.people?.length !== 0 ? persistedState : undefined,
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 )
 
